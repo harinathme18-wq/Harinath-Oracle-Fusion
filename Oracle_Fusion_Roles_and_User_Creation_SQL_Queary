@@ -1,0 +1,111 @@
+Select distinct
+roles.username,
+  roles.first_name,
+  roles.last_name,
+  roles.job jobtitle,
+    roles.dept,
+  to_char(replace(replace (replace(Security_Context,CHR(13),' '),CHR(10),''),CHR(9),' ')) as Security_Context,
+to_char(replace(replace (replace(Security_Context_Value,CHR(13),' '),CHR(10),''),CHR(9),' ')) as Security_Context_Value,
+  to_char(roles.role_name) role_name,
+to_char(roles.status) role_status
+from
+(
+select
+pu.username,
+panf.first_name,
+panf.last_name,
+prd.role_id,
+replace(replace (replace(prdt.role_name,CHR(13),' '),CHR(10),''),CHR(9),' ') as role_name,
+replace(replace (replace(prd.role_common_name,CHR(13),' '),CHR(10),''),CHR(9),' ') as role_common_name,
+prd.role_guid,
+decode(prd.active_flag,'Y','ACTIVE','INACTIVE') status,
+replace(replace (replace(prdt.description,CHR(13),' '),CHR(10),''),CHR(9),' ') as description,
+  (select pj.name
+  from PER_ALL_ASSIGNMENTS_F paaf,
+        PER_JOBS_F_TL pj
+  where paaf.job_id = pj.job_id
+  and trunc(sysdate) between trunc(paaf.effective_start_date) and trunc(paaf.effective_end_date)
+  and trunc(sysdate) between trunc(pj.effective_start_date) and trunc(pj.effective_end_date)
+    and paaf.PRIMARY_FLAG = 'Y'
+  and person_id = pu.person_id
+  and assignment_type IN ('E','C'))job
+,(select pd.name
+  from PER_ALL_ASSIGNMENTS_F paaf,
+        per_Departments pd
+  where paaf.ORGANIZATION_ID = pd.ORGANIZATION_ID
+  and trunc(sysdate) between trunc(paaf.effective_start_date) and trunc(paaf.effective_end_date)
+  and trunc(sysdate) between trunc(pd.effective_start_date) and trunc(pd.effective_end_date)
+    and paaf.PRIMARY_FLAG = 'Y'
+  and person_id = pu.person_id
+  and assignment_type IN ('E','C'))dept
+FROM per_user_roles pur,
+per_users pu,
+per_roles_dn_tl prdt,
+per_roles_dn prd,
+per_person_names_f panf
+WHERE pu.user_id = pur.user_id
+AND prdt.role_id = pur.role_id
+AND prdt.role_id = prd.role_id
+AND prdt.language = USERENV ('lang')
+AND pu.active_flag = 'Y'
+and pu.person_id = panf.person_id
+and trunc(sysdate) between trunc(effective_start_date) and trunc(effective_end_date)
+and name_type = 'GLOBAL'
+) roles
+left join
+(
+select 'Intercompany Organization' as security_context,interco.INTERCO_ORG_NAME as security_context_value , role.ROLE_NAME
+from fusion.FUN_ROLE_DATA_SECURITY_MAPPING role,
+fusion.FUN_INTERCO_ORGANIZATIONS interco
+where role.object_name='FUN_INTERCO_ORGANIZATIONS'
+union
+select 'Asset Book' as security_context,book.book_type_name as security_context_value , role.ROLE_NAME
+from fusion.FUN_ROLE_DATA_SECURITY_MAPPING role,
+fusion.FA_BOOK_CONTROLS book
+where role.object_name='FA_BOOK_CONTROLS'
+union
+select 'Cost Organization' as security_context,cost.COST_ORG_NAME as security_context_value, role.ROLE_NAME
+from fusion.FUN_ROLE_DATA_SECURITY_MAPPING role,
+fusion.CST_COST_ORGS_V cost
+where role.object_name='CST_COST_ORGS_V'
+union
+select 'Ledgers' as security_context,led.NAME as security_context_value, role.role_name
+from fusion.GL_LEDGERS led,
+fusion.FUN_ROLE_DATA_SECURITY_MAPPING role
+where role.object_name='GL_LEDGERS'
+union
+select 'Manufacturing Plant' as security_context,mfg.DEF_SUPPLY_SUBINV as security_context_value, role.ROLE_NAME
+from fusion.FUN_ROLE_DATA_SECURITY_MAPPING role,
+fusion.RCS_MFG_PARAMETERS mfg
+where role.object_name='RCS_MFG_PARAMETERS'
+union
+select 'Control Budget' as security_context,budget.NAME as security_context_value, role.ROLE_NAME
+from fusion.FUN_ROLE_DATA_SECURITY_MAPPING role,
+fusion.XCC_CONTROL_BUDGETS budget
+where role.object_name='XCC_CONTROL_BUDGETS'
+union
+select 'Reference data Set' as security_context, st.SET_NAME as security_context_value, role.ROLE_NAME
+from fusion.FUN_ROLE_DATA_SECURITY_MAPPING role,
+fusion.FND_SETID_SETS_VL st
+where role.object_name='FND_SETID_SETS_VL'
+union
+select 'Data Access Set' as security_context , gl.name as security_context_value,
+role.ROLE_NAME
+from fusion.FUN_ROLE_DATA_SECURITY_MAPPING role,
+fusion.gl_access_sets gl
+where role.object_name='GL_ACCESS_SETS'
+union
+select 'Business Unit' as security_context,bu.bu_name as security_context_value,
+role.ROLE_NAME
+from fusion.FUN_ALL_BUSINESS_UNITS_V bu,
+fusion.FUN_ROLE_DATA_SECURITY_MAPPING role
+where role.object_name='FUN_ALL_BUSINESS_UNITS_V'
+union
+select 'Legal Entity' as security_context, xep.NAME as security_context_value , role.role_name
+from
+fusion.xle_entity_profiles xep ,
+fusion.FUN_ROLE_DATA_SECURITY_MAPPING role
+where
+role.object_name='XLE_ENTITY_PROFILES'
+)Data_access on roles.role_common_name = Data_access.role_name
+order by role_name,Security_Context
