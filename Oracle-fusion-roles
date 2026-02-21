@@ -1,0 +1,29 @@
+##What is Role ?
+
+##>>A role is some kind of privilege that you can assign to the user allowing them to perform certain type actions in the application.
+
+##Types of Roles
+    FUSION ROLES        EBS ROLE
+##>>Job Role            Responsibility
+##>>Duty Role           Menu,Sub menu
+##>>Privilege Role      Form Function
+##>>Abstract Role
+##  JOB_ROLES-----These are also known as Enterprise roles.
+These roles get mapped to one or more duty roles, because a person that takes a job in a company, then they are meant to perform several duties. 
+For example, >> a HR Recruiter Job will have a duty to scan resumes submitted and place an offer to the individual. 
+The name of this role has the suffix _JOB. 
+Some examples are Account Payables Manager Job, General Ledger Accounting Manager Job etc.
+Job roles are also referred to as external roles. ##
+## DUTY_ROLES----These are also known as Application Roles,  and  duties are performed by the individuals.
+Examples are Invoice Creation Duty, Invoice Approval Duty, GL Journal Entry Duty, GL Journal Approval Duty, GL Journal Posting Duty etc.
+It is like saying to a new staff that you can perform xyz duties within your job or it is your duty to perform x y z things in your organization.
+The name of this role has the suffix _DUTY.##
+## ABSTRACT_ROLES-----These are also known as Enterprise roles.
+These roles are associated with a user irrespective of the Job they perform within an enterprise.
+Therefore abstract roles are at a higher level spanning various jobs, and hence their name abstract. 
+Abstract roles represent a worker’s role in the enterprise, independently of the job that the worker is hired to do.
+There are three seeded abstract roles delivered with Oracle Fusion HCM. These are the Employee, Line Manager, and Contingent Worker roles.
+Abstract roles are assigned to user automatically when some event occurs like Hire an employee, Terminate an employee or Promote an employee.##
+## PRIVILEAGE_ROLES----    
+
+
