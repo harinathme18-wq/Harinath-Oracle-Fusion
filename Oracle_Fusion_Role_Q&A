@@ -1,0 +1,85 @@
+Security and Roles Q&A
+--------------------------
+
+1.1) what are the roles we have?
+
+--->> Job role, Duty role, abstract role and privilege role
+
+
+1.2) roles drill down
+
+--->> Drill-down capabilities in Oracle Fusion SCM enable users to navigate from high-level, summarized data in dashboards and reports (like OTBI or Info lets) to specific, transactional-level details, such as individual inventory transactions, purchase orders, or work orders. This functionality is driven by specific job roles, data access security, and configured deep links.
+--->> To enable drill-down capabilities, users must be assigned appropriate job roles that contain the necessary duty roles and privileges.
+--->> Supply Chain Planner (ORA_MSC_SUPPLY_CHAIN_PLANNER_JOB): Allows planners to drill down from plan exceptions (e.g., stockouts) to the replenishment workbench or specific supply/demand details.
+--->> Materials Planner (ORA_MSC_MATERIALS_PLANNER_JOB): Enables analysis of plan performance vs. actuals with deep-level investigation into Item, Supplier, and Site attributes.
+--->> Inventory Manager / Warehouse Operator: Used for accessing, reviewing, and auditing inventory transactions and balances.
+--->> Production Scheduler / Supervisor (ORA_MSC_PRODUCTION_SCHEDULER_JOB): Allows drilling down from work area metrics to specific work orders or dispatch lists.
+--->> Supply Chain Application Administrator (ORA_RCS_SUPPLY_CHAIN_APPLICATION_ADMINISTRATOR_JOB): Provides overarching access to application profile values, enabling deeper system configuration.
+
+---------Core Areas for Drill-Down---
+Drill-down is particularly utilized in the following SCM functional areas:
+>>> Supply Planning & Demand Management: Users can move from a high-level plan (tree map or chart) to view detailed variance performance in a table format.
+>>> Inventory Management: Allows drilling down to transaction details, such as viewing specific transaction IDs (TRANSACTION_ID) to investigate material moves, serial, or lot numbers.
+>>> Manufacturing: Provides the ability to drill down from work order summaries to detailed operations, material, and resource transaction history.
+>>> Purchasing & Supplier Channel: Enables navigating from reports (like OTBI) down to specific Purchase Order (PO) headers and lines.
+
+--------Key Components for Enabling Drill-Down-------
+1. OTBI (Oracle Transactional Business Intelligence): Uses Action Links to directly link summary reports to transaction pages.
+2. Data Access Sets: Proper data access must be assigned for users to view the data they are drilling into (e.g., specific inventory organizations).
+3. Deep Links: Predefined links used to navigate from analytic reports directly into specific Oracle Fusion Application pages.
+3. Security Console: Used to create custom roles if predefined roles (like ORA_CJM_SUPPLIER_CHANNEL_VIEW_DUTY) do not provide the necessary access to detailed data. 
+
+---Troubleshooting Drill-Down Access--------
+
+---"View Only" Roles: Sometimes, roles designed for viewing (like those in Supplier Channel Management) may not allow drilling down into specific descriptive flex fields (DFFs) or child records. This requires custom role definition to add necessary privileges.
+----Data Access Permissions: If a user can see a report but cannot drill down, check their security profile to ensure they have data access to the underlying business unit or inventory organization.
+
+
+1.3) Abstract is a special role (Employee/Buyer/Contingent Worker)
+
+--->>> Abstract Roles are a special category of seeded roles that represent a worker's function in the enterprise independently of their specific job. 
+
+They are designed to provide basic, standard access to self-service functionality for all users, such as accessing personal information, viewing payslips, or searching the employee directory. 
+
+Here is a breakdown of the specific roles mentioned:
+1. Abstract Roles (Employee/Contingent Worker)
+Employee (ORA_PER_EMPLOYEE_ABSTRACT): Defines a user as an employee. It grants access to self-service tasks like managing personal profile info, timecards, and expenses.
+Contingent Worker (ORA_PER_CONTINGENT_WORKER_ABSTRACT): Defines a user as a contingent worker (contractor, freelancer). Similar to employees, they have access to their own records.
+Line Manager (ORA_PER_LINE_MANAGER_ABSTRACT): Allows managers to manage their direct reports' information. 
+
+2. Is "Buyer" an Abstract Role?
+According to Oracle's standard role definitions, Buyer is typically a Job Role, not an Abstract Role. 
+
+Abstract Roles (Employee, Contingent Worker) are assigned to everyone to allow them to access the system, regardless of their job.
+Job Roles (Buyer, Procurement Manager) are assigned based on specific job duties.
+Note: A "Procurement Requester" is sometimes considered a specialized role, but Buyer is usually a functional Job Role (e.g., ORA_PO_BUYER_JOB). 
+
+Key Characteristics of Abstract Roles in SCM/HCM
+Direct Assignment: They are usually assigned directly to users.
+No Job Hierarchy: They exist regardless of the job the worker is hired to do.
+Predefined: They are part of the Oracle Applications Cloud Security Reference Implementation.
+
+1) how to create user ?
+
+
+2) where will find roles content?
+
+
+3) what are the default roles to user ?
+
+
+4) how to create custom role ?
+
+5) what are the sync jobs from LDAP ?
+
+
+6) how to customize standard role ?
+
+
+7) for a job role how to customize duty role ?
+
+		
+8) how to add auto provision roles?
+
+
+9) can you give us one of the use case which you've created new custom role ?
