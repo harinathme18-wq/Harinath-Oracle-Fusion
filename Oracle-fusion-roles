@@ -27,3 +27,58 @@ Abstract roles are assigned to user automatically when some event occurs like Hi
 ## PRIVILEAGE_ROLES----    
 
 
+--> timesheet
+--> expenses
+--> HR spoc
+--> payslips
+--> bank account
+--> nominees (contacts)
+--> personal infomration
+--> project details
+
+--> manager
+
+100 employees
+		--> HR people --> access ?
+							--> abstract role
+									--> when hire an employees		
+											-- custom abstract role will add to the use automatically
+											
+--> may-2nd --> your emp record will be created in system --> emp type --> future employee
+				--> 2nd june --> future employess --> employee
+
+
+--> personal information
+--> requisitions
+--> schedule process
+--> report and analytics read access
+
+new user roles
+---------------
+-> Application Implementation Consultant -- job role
+		--> generic modules access
+		--> report and analytics write access
+		--> settings and actions
+		--> configuration module
+		
+--> it secuirty manager -> job role
+--> employee abstract role
+
+--> Auto Provision
+--------------------------
+--> create role mapping
+		--> Manage role provisiong rules task
+		--> add couple of roles using condition person type as employee
+		--> create a person and map to user
+				--> setup and maint..
+						--> Manage users
+		--> roles can add to the user automatically using
+				-> Autoprovision Roles for All Users
+
+--> delegation rules
+		--> vacation rules
+				--> approval rules
+				--> role 
+
+
+
